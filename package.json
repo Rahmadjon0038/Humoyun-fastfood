@@ -1,0 +1,21 @@
+{
+  "name": "humoyun",
+  "version": "1.0.0",
+  "description": "FastFood backend with Express, better-sqlite3 and Swagger",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
