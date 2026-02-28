@@ -39,19 +39,24 @@ const router = express.Router();
  *                         type: integer
  *                         nullable: true
  */
-router.get("/", (req, res) => {
-  const fastfoods = db
-    .prepare(
+router.get("/", async (req, res) => {
+  try {
+    const fastfoods = await db.all(
       `SELECT id, name, price, discount_price, image_url, category_id
        FROM fastfoods
        ORDER BY id DESC`
-    )
-    .all();
+    );
 
-  res.json({
-    success: true,
-    data: fastfoods
-  });
+    res.json({
+      success: true,
+      data: fastfoods
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Fastfoodlarni olishda xatolik yuz berdi"
+    });
+  }
 });
 
 module.exports = router;

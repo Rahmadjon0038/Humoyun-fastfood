@@ -31,15 +31,22 @@ const router = express.Router();
  *                       image_url:
  *                         type: string
  */
-router.get("/", (req, res) => {
-  const categories = db
-    .prepare("SELECT id, name, image_url FROM categories ORDER BY id DESC")
-    .all();
+router.get("/", async (req, res) => {
+  try {
+    const categories = await db.all(
+      "SELECT id, name, image_url FROM categories ORDER BY id DESC"
+    );
 
-  res.json({
-    success: true,
-    data: categories
-  });
+    res.json({
+      success: true,
+      data: categories
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Kategoriyalarni olishda xatolik yuz berdi"
+    });
+  }
 });
 
 module.exports = router;
