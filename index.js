@@ -5,6 +5,7 @@ const swaggerSpec = require("./src/config/swagger");
 const { initializeDatabase } = require("./src/db");
 const categoriesRouter = require("./src/routes/categories");
 const fastfoodsRouter = require("./src/routes/fastfoods");
+const authRouter = require("./src/routes/auth");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/categories", categoriesRouter);
 app.use("/api/fastfoods", fastfoodsRouter);
+app.use("/api/auth", authRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res) => {
@@ -36,17 +38,22 @@ app.use((req, res) => {
 });
 
 async function startServer() {
-  try {
-    await initializeDatabase();
+  await initializeDatabase();
 
-    app.listen(PORT, () => {
-      console.log(`Server ishladi: http://localhost:${PORT}`);
-      console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
-    });
-  } catch (error) {
-    console.error("Database ishga tushmadi:", error);
-    process.exit(1);
-  }
+  return app.listen(PORT, () => {
+    console.log(`Server ishladi: http://localhost:${PORT}`);
+    console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
+  });
 }
 
-startServer();
+if (require.main === module) {
+  startServer().catch((error) => {
+    console.error("Database ishga tushmadi:", error);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  app,
+  startServer
+};
